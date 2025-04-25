@@ -104,6 +104,7 @@ final class LoginViewController: UIViewController {
         self.view.backgroundColor = .black
         
         setLayout()
+        setDelegate()
     }
     
     // MARK: - Function
@@ -170,7 +171,27 @@ final class LoginViewController: UIViewController {
             make.width.equalTo(335)
         }
     }
+    
+    private func setDelegate() {
+        idTextField.delegate = self
+        pwTextField.delegate = self
+    }
 }
+
+    // MARK: - Extension
+
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.gray2.cgColor
+        textField.layer.borderWidth = 1
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.gray4.cgColor
+        textField.layer.borderWidth = 0
+    }
+}
+
 
 #Preview {
     LoginViewController()
