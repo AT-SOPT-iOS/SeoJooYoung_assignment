@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class LoginViewController: UIViewController {
     
@@ -100,15 +101,71 @@ final class LoginViewController: UIViewController {
         
         self.view.backgroundColor = .black
         
-        setUI()
+        setLayout()
     }
     
     // MARK: - Function
     
-    private func setUI() {
-        [loginTitleLabel, idTextField, pwTextField, loginButton].forEach {
+    private func setLayout() {
+        [loginTitleLabel, idTextField, pwTextField, loginButton, ].forEach {
             self.view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        dividerView.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.height.equalTo(12)
+        }
+        
+        let findButtonStackView = UIStackView(arrangedSubviews: [findIDButton, dividerView, findPWButton])
+        findButtonStackView.axis = .horizontal
+        findButtonStackView.distribution = .fillProportionally
+        findButtonStackView.spacing = 34
+        
+        self.view.addSubview(findButtonStackView)
+        
+        let signUpStackView = UIStackView(arrangedSubviews: [signUpPromptLabel, createNickNameButton])
+        signUpStackView.axis = .horizontal
+        signUpStackView.distribution = .fillEqually
+        signUpStackView.spacing = 30
+        
+        self.view.addSubview(signUpStackView)
+        
+        loginTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(90)
+            make.centerX.equalToSuperview()
+        }
+        
+        idTextField.snp.makeConstraints { make in
+            make.top.equalTo(loginTitleLabel.snp.bottom).offset(31)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(335)
+            make.height.equalTo(52)
+        }
+        
+        pwTextField.snp.makeConstraints { make in
+            make.top.equalTo(idTextField.snp.bottom).offset(7)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(335)
+            make.height.equalTo(52)
+        }
+        
+        loginButton.snp.makeConstraints { make in
+            make.top.equalTo(pwTextField.snp.bottom).offset(21)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(335)
+            make.height.equalTo(52)
+        }
+        
+        findButtonStackView.snp.makeConstraints { make in
+            make.top.equalTo(loginButton.snp.bottom).offset(31)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(240)
+        }
+        
+        signUpStackView.snp.makeConstraints { make in
+            make.top.equalTo(findButtonStackView.snp.bottom).offset(28)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(335)
         }
     }
 }
