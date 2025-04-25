@@ -105,6 +105,7 @@ final class LoginViewController: UIViewController {
         
         setLayout()
         setDelegate()
+        setAddTarget()
     }
     
     // MARK: - Function
@@ -176,6 +177,23 @@ final class LoginViewController: UIViewController {
         idTextField.delegate = self
         pwTextField.delegate = self
     }
+    
+    private func setAddTarget() {
+        idTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
+        pwTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
+    }
+    
+    @objc
+    private func textfieldDidChange() {
+        let isIDFilled = !(idTextField.text ?? "").isEmpty
+        let isPWFilled = !(pwTextField.text ?? "").isEmpty
+        let loginBtnEnable = isIDFilled && isPWFilled
+        
+        loginButton.isEnabled = loginBtnEnable
+        loginButton.backgroundColor = loginBtnEnable ? .red : .clear
+        loginButton.setTitleColor(loginBtnEnable ? .white : .gray2, for: .normal)
+    }
+    
 }
 
     // MARK: - Extension
