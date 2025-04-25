@@ -40,6 +40,13 @@ final class LoginViewController: UIViewController {
         return button
     }()
     
+    let allClearButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "x.circle"), for: .normal)
+        button.tintColor = .gray2
+        return button
+    }()
+    
     var pwTextField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "비밀번호"
@@ -50,6 +57,7 @@ final class LoginViewController: UIViewController {
         textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 18, height: 0))
         textfield.leftViewMode = .always
         textfield.layer.cornerRadius = 3
+        textfield.isSecureTextEntry = true
         return textfield
     }()
     
@@ -114,10 +122,10 @@ final class LoginViewController: UIViewController {
         setAddTarget()
     }
     
-    // MARK: - Function
+    // MARK: - UI Setting
     
     private func setLayout() {
-        [loginTitleLabel, idTextField, pwTextField, loginButton, ].forEach {
+        [loginTitleLabel, idTextField, pwTextField, loginButton, securityToggleButton, allClearButton].forEach {
             self.view.addSubview($0)
         }
         
@@ -159,6 +167,18 @@ final class LoginViewController: UIViewController {
             make.height.equalTo(52)
         }
         
+        securityToggleButton.snp.makeConstraints { make in
+            make.top.equalTo(pwTextField.snp.top).offset(18)
+            make.trailing.equalTo(pwTextField.snp.trailing).offset(-20)
+            make.width.height.equalTo(20)
+        }
+        
+        allClearButton.snp.makeConstraints { make in
+            make.top.equalTo(securityToggleButton.snp.top).offset(0)
+            make.trailing.equalTo(securityToggleButton.snp.leading).offset(-16)
+            make.width.height.equalTo(20)
+        }
+        
         loginButton.snp.makeConstraints { make in
             make.top.equalTo(pwTextField.snp.bottom).offset(21)
             make.centerX.equalToSuperview()
@@ -177,25 +197,9 @@ final class LoginViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(335)
         }
-        
-        // TODO: - 리팩토링 필요할 듯 ;-;
-        
-        let buttonContainer = UIView()
-        
-        buttonContainer.addSubview(securityToggleButton)
-        
-        securityToggleButton.snp.makeConstraints { make in
-            make.width.height.equalTo(20)
-        }
-        
-        buttonContainer.snp.makeConstraints { make in
-            make.width.equalTo(40)
-            make.height.equalTo(20)
-        }
-        
-        pwTextField.rightView = buttonContainer
-        pwTextField.rightViewMode = .always
     }
+    
+    // MARK: - Function
     
     private func setDelegate() {
         idTextField.delegate = self
@@ -206,6 +210,7 @@ final class LoginViewController: UIViewController {
         idTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
         pwTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
         securityToggleButton.addTarget(self, action: #selector(togglePWSecurity), for: .touchUpInside)
+        allClearButton.addTarget(self, action: #selector(clearTextField(_:)), for: .touchUpInside)
     }
     
     @objc
@@ -225,6 +230,17 @@ final class LoginViewController: UIViewController {
                 
         let image = pwTextField.isSecureTextEntry ? UIImage(resource: .securityTrue) : UIImage(resource: .securityFalse).withTintColor(UIColor.gray1)
         securityToggleButton.setImage(image, for: .normal)
+    }
+    
+    @objc
+    private func clearTextField(_ sender: UIButton) {
+        if idTextField.isFirstResponder {
+            idTextField.text = ""
+            idTextField.sendActions(for: .editingChanged)
+        } else if pwTextField.isFirstResponder {
+            pwTextField.text = ""
+            pwTextField.sendActions(for: .editingChanged)
+        }
     }
     
 }
