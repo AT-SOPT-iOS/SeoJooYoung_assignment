@@ -24,6 +24,7 @@ final class LoginViewController: UIViewController {
     var idTextField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "아이디"
+        textfield.setPlaceholderColor(.gray2)
         textfield.textColor = .gray2
         textfield.backgroundColor = .gray4
         textfield.font = .pretendard(size: 15, weight: .semiBold)
@@ -36,6 +37,7 @@ final class LoginViewController: UIViewController {
     var pwTextField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "비밀번호"
+        textfield.setPlaceholderColor(.gray2)
         textfield.textColor = .gray2
         textfield.backgroundColor = .gray4
         textfield.font = .pretendard(size: 15, weight: .semiBold)
