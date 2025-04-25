@@ -34,6 +34,12 @@ final class LoginViewController: UIViewController {
         return textfield
     }()
     
+    let securityToggleButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage.securityTrue, for: .normal)
+        return button
+    }()
+    
     var pwTextField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "비밀번호"
@@ -171,6 +177,24 @@ final class LoginViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(335)
         }
+        
+        // TODO: - 리팩토링 필요할 듯 ;-;
+        
+        let buttonContainer = UIView()
+        
+        buttonContainer.addSubview(securityToggleButton)
+        
+        securityToggleButton.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+        }
+        
+        buttonContainer.snp.makeConstraints { make in
+            make.width.equalTo(40)
+            make.height.equalTo(20)
+        }
+        
+        pwTextField.rightView = buttonContainer
+        pwTextField.rightViewMode = .always
     }
     
     private func setDelegate() {
@@ -181,6 +205,7 @@ final class LoginViewController: UIViewController {
     private func setAddTarget() {
         idTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
         pwTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
+        securityToggleButton.addTarget(self, action: #selector(togglePWSecurity), for: .touchUpInside)
     }
     
     @objc
@@ -192,6 +217,14 @@ final class LoginViewController: UIViewController {
         loginButton.isEnabled = loginBtnEnable
         loginButton.backgroundColor = loginBtnEnable ? .red : .clear
         loginButton.setTitleColor(loginBtnEnable ? .white : .gray2, for: .normal)
+    }
+    
+    @objc
+    private func togglePWSecurity() {
+        pwTextField.isSecureTextEntry.toggle()
+                
+        let image = pwTextField.isSecureTextEntry ? UIImage(resource: .securityTrue) : UIImage(resource: .securityFalse).withTintColor(UIColor.gray1)
+        securityToggleButton.setImage(image, for: .normal)
     }
     
 }
