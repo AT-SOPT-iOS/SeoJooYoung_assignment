@@ -36,13 +36,13 @@ final class LoginViewController: UIViewController {
     
     let securityToggleButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage.securityTrue, for: .normal)
+        button.setImage(.eyeSlash, for: .normal)
         return button
     }()
     
     let allClearButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "x.circle"), for: .normal)
+        button.setImage(.xCircle, for: .normal)
         button.tintColor = .gray2
         return button
     }()
@@ -228,7 +228,7 @@ final class LoginViewController: UIViewController {
     private func togglePWSecurity() {
         pwTextField.isSecureTextEntry.toggle()
                 
-        let image = pwTextField.isSecureTextEntry ? UIImage(resource: .securityTrue) : UIImage(resource: .securityFalse).withTintColor(UIColor.gray1)
+        let image = pwTextField.isSecureTextEntry ? UIImage.eyeSlash : UIImage.eye.withTintColor(UIColor.gray1)
         securityToggleButton.setImage(image, for: .normal)
     }
     
