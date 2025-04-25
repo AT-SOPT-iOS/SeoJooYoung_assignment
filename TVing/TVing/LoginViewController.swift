@@ -211,6 +211,7 @@ final class LoginViewController: UIViewController {
         pwTextField.addTarget(self, action: #selector(textfieldDidChange), for: .editingChanged)
         securityToggleButton.addTarget(self, action: #selector(togglePWSecurity), for: .touchUpInside)
         allClearButton.addTarget(self, action: #selector(clearTextField(_:)), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
     @objc
@@ -241,6 +242,14 @@ final class LoginViewController: UIViewController {
             pwTextField.text = ""
             pwTextField.sendActions(for: .editingChanged)
         }
+    }
+    
+    @objc
+    private func loginButtonTapped() {
+        let welcomeVC = WelcomeViewController()
+        welcomeVC.id = idTextField.text
+        navigationController?.pushViewController(welcomeVC, animated: true)
+        navigationController?.navigationBar.isHidden = true
     }
     
 }
