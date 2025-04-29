@@ -12,7 +12,7 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Property
     
-    let loginTitleLabel: UILabel = {
+    private let loginTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "TVING ID 로그인"
         label.textColor = .white
@@ -21,7 +21,7 @@ final class LoginViewController: UIViewController {
         return label
     }()
     
-    var idTextField: UITextField = {
+    private var idTextField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "아이디"
         textfield.setPlaceholderColor(.gray2)
@@ -34,20 +34,20 @@ final class LoginViewController: UIViewController {
         return textfield
     }()
     
-    let securityToggleButton: UIButton = {
+    private let securityToggleButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(.eyeSlash, for: .normal)
         return button
     }()
     
-    let allClearButton: UIButton = {
+    private let allClearButton: UIButton = {
         let button = UIButton()
         button.setImage(.xCircle, for: .normal)
         button.tintColor = .gray2
         return button
     }()
     
-    var pwTextField: UITextField = {
+    private var pwTextField: UITextField = {
         let textfield = UITextField()
         textfield.placeholder = "비밀번호"
         textfield.setPlaceholderColor(.gray2)
@@ -61,7 +61,7 @@ final class LoginViewController: UIViewController {
         return textfield
     }()
     
-    let loginButton: UIButton = {
+    private let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("로그인하기", for: .normal)
         button.titleLabel?.font = .pretendard(size: 14, weight: .semiBold)
@@ -72,7 +72,7 @@ final class LoginViewController: UIViewController {
         return button
     }()
     
-    let findIDButton: UIButton = {
+    private let findIDButton: UIButton = {
         let button = UIButton()
         button.setTitle("아이디 찾기", for: .normal)
         button.titleLabel?.font = .pretendard(size: 14, weight: .semiBold)
@@ -80,7 +80,7 @@ final class LoginViewController: UIViewController {
         return button
     }()
     
-    let findPWButton: UIButton = {
+    private let findPWButton: UIButton = {
         let button = UIButton()
         button.setTitle("비밀번호 찾기", for: .normal)
         button.titleLabel?.font = .pretendard(size: 14, weight: .semiBold)
@@ -88,13 +88,13 @@ final class LoginViewController: UIViewController {
         return button
     }()
     
-    let dividerView: UIView = {
+    private let dividerView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray4
         return view
     }()
     
-    let signUpPromptLabel: UILabel = {
+    private let signUpPromptLabel: UILabel = {
         let label = UILabel()
         label.text = "아직 계정이 없으신가요?"
         label.textColor = .gray3
@@ -102,7 +102,7 @@ final class LoginViewController: UIViewController {
         return label
     }()
     
-    let createNickNameButton: UIButton = {
+    private let createNickNameButton: UIButton = {
         let button = UIButton()
         button.setTitle("닉네임 만들러가기", for: .normal)
         button.titleLabel?.font = .pretendard(size: 14, weight: .regular)

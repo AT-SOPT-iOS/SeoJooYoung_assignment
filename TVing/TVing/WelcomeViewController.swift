@@ -13,14 +13,14 @@ class WelcomeViewController: UIViewController {
 
     // MARK: - Property
     
-    let logoImageView: UIImageView = {
+    private let logoImageView: UIImageView = {
         let image = UIImageView()
         image.image = .logo
         image.contentMode = .scaleAspectFit
         return image
     }()
     
-    let welcomeLabel: UILabel = {
+    private let welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.font = .pretendard(size: 23, weight: .bold)
@@ -30,7 +30,7 @@ class WelcomeViewController: UIViewController {
         return label
     }()
     
-    let backToLoginVCButton: UIButton = {
+    private let backToLoginVCButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .red
         button.setTitleColor(.white, for: .normal)
