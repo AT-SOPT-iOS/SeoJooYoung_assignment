@@ -148,54 +148,54 @@ final class LoginViewController: UIViewController {
         
         self.view.addSubview(signUpStackView)
         
-        loginTitleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(90)
-            make.centerX.equalToSuperview()
+        loginTitleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(90)
+            $0.centerX.equalToSuperview()
         }
         
-        idTextField.snp.makeConstraints { make in
-            make.top.equalTo(loginTitleLabel.snp.bottom).offset(31)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(335)
-            make.height.equalTo(52)
+        idTextField.snp.makeConstraints {
+            $0.top.equalTo(loginTitleLabel.snp.bottom).offset(31)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(335)
+            $0.height.equalTo(52)
         }
         
-        pwTextField.snp.makeConstraints { make in
-            make.top.equalTo(idTextField.snp.bottom).offset(7)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(335)
-            make.height.equalTo(52)
+        pwTextField.snp.makeConstraints {
+            $0.top.equalTo(idTextField.snp.bottom).offset(7)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(335)
+            $0.height.equalTo(52)
         }
         
-        securityToggleButton.snp.makeConstraints { make in
-            make.top.equalTo(pwTextField.snp.top).offset(18)
-            make.trailing.equalTo(pwTextField.snp.trailing).offset(-20)
-            make.width.height.equalTo(20)
+        securityToggleButton.snp.makeConstraints {
+            $0.top.equalTo(pwTextField.snp.top).offset(18)
+            $0.trailing.equalTo(pwTextField.snp.trailing).offset(-20)
+            $0.width.height.equalTo(20)
         }
         
-        allClearButton.snp.makeConstraints { make in
-            make.top.equalTo(securityToggleButton.snp.top).offset(0)
-            make.trailing.equalTo(securityToggleButton.snp.leading).offset(-16)
-            make.width.height.equalTo(20)
+        allClearButton.snp.makeConstraints {
+            $0.top.equalTo(securityToggleButton.snp.top).offset(0)
+            $0.trailing.equalTo(securityToggleButton.snp.leading).offset(-16)
+            $0.width.height.equalTo(20)
         }
         
-        loginButton.snp.makeConstraints { make in
-            make.top.equalTo(pwTextField.snp.bottom).offset(21)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(335)
-            make.height.equalTo(52)
+        loginButton.snp.makeConstraints {
+            $0.top.equalTo(pwTextField.snp.bottom).offset(21)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(335)
+            $0.height.equalTo(52)
         }
         
-        findButtonStackView.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.snp.bottom).offset(31)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(240)
+        findButtonStackView.snp.makeConstraints {
+            $0.top.equalTo(loginButton.snp.bottom).offset(31)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(240)
         }
         
-        signUpStackView.snp.makeConstraints { make in
-            make.top.equalTo(findButtonStackView.snp.bottom).offset(28)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(335)
+        signUpStackView.snp.makeConstraints {
+            $0.top.equalTo(findButtonStackView.snp.bottom).offset(28)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(335)
         }
     }
     

@@ -54,22 +54,22 @@ class WelcomeViewController: UIViewController {
             self.view.addSubview($0)
         }
         
-        logoImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(58)
-            make.height.equalTo(210)
-            make.width.equalToSuperview()
+        logoImageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(58)
+            $0.height.equalTo(210)
+            $0.width.equalToSuperview()
         }
         
-        welcomeLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(70)
-            make.centerX.equalToSuperview()
+        welcomeLabel.snp.makeConstraints {
+            $0.top.equalTo(logoImageView.snp.bottom).offset(70)
+            $0.centerX.equalToSuperview()
         }
         
-        backToLoginVCButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-66)
-            make.width.equalTo(335)
-            make.height.equalTo(52)
-            make.centerX.equalToSuperview()
+        backToLoginVCButton.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-66)
+            $0.width.equalTo(335)
+            $0.height.equalTo(52)
+            $0.centerX.equalToSuperview()
         }
     }
     
