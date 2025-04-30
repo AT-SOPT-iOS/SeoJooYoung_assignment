@@ -52,14 +52,24 @@ final class MainViewController: UIViewController {
         let headerStackView = UIStackView(arrangedSubviews: [logoImageView, headerButtonStackView])
         headerStackView.axis = .horizontal
         headerStackView.distribution = .fillProportionally
-        headerStackView.spacing = 103
+        headerStackView.spacing = 130
+        headerStackView.alignment = .center
         
         self.view.addSubview(headerStackView)
         
         headerStackView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(40)
+            $0.top.equalToSuperview().offset(50)
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview().inset(10)
+            $0.height.equalTo(78)
+        }
+        
+        searchButton.snp.makeConstraints {
+            $0.width.height.equalTo(30)
+        }
+        
+        profileButton.snp.makeConstraints {
+            $0.width.height.equalTo(30)
         }
     }
     
