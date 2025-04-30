@@ -30,7 +30,7 @@ class WelcomeViewController: UIViewController {
         return label
     }()
     
-    private let backToLoginVCButton: UIButton = {
+    private let pushToMainVCButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .red
         button.setTitleColor(.white, for: .normal)
@@ -50,7 +50,7 @@ class WelcomeViewController: UIViewController {
     private func setLayout() {
         view.backgroundColor = .black
         
-        [logoImageView, welcomeLabel, backToLoginVCButton].forEach {
+        [logoImageView, welcomeLabel, pushToMainVCButton].forEach {
             self.view.addSubview($0)
         }
         
@@ -65,7 +65,7 @@ class WelcomeViewController: UIViewController {
             $0.centerX.equalToSuperview()
         }
         
-        backToLoginVCButton.snp.makeConstraints {
+        pushToMainVCButton.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-66)
             $0.width.equalTo(335)
             $0.height.equalTo(52)
@@ -74,7 +74,7 @@ class WelcomeViewController: UIViewController {
     }
     
     private func setAddTarget() {
-        backToLoginVCButton.addTarget(self, action: #selector(backToLoginVCButtonTapped), for: .touchUpInside)
+        pushToMainVCButton.addTarget(self, action: #selector(pushToMainVCButtonTapped), for: .touchUpInside)
 
     }
     
@@ -87,12 +87,10 @@ class WelcomeViewController: UIViewController {
     }
     
     @objc
-    private func backToLoginVCButtonTapped() {
-        if self.navigationController == nil {
-            self.dismiss(animated: true)
-        } else {
-            self.navigationController?.popViewController(animated: true)
-        }
+    private func pushToMainVCButtonTapped() {
+        let mainVC = MainViewController()
+        navigationController?.pushViewController(mainVC, animated: true)
+        navigationController?.navigationBar.isHidden = true
     }
 }
 
