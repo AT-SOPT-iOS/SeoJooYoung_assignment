@@ -12,6 +12,8 @@ final class LoginViewController: UIViewController {
     
     // MARK: - Property
     
+    private var previousLoginButtonState: Bool?
+    
     private let loginTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "TVING ID 로그인"
@@ -220,6 +222,8 @@ final class LoginViewController: UIViewController {
         let isPWFilled = !(pwTextField.text ?? "").isEmpty
         let loginBtnEnable = isIDFilled && isPWFilled
         
+        guard previousLoginButtonState != loginBtnEnable else { return }
+        previousLoginButtonState = loginBtnEnable
         loginButton.isEnabled = loginBtnEnable
         loginButton.backgroundColor = loginBtnEnable ? .red : .clear
         loginButton.setTitleColor(loginBtnEnable ? .white : .gray2, for: .normal)
