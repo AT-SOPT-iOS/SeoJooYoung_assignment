@@ -9,6 +9,15 @@ import UIKit
 import SnapKit
 import Then
 
+enum CollectionViewTag: Int {
+    case top20 = 0
+    case popularLive
+    case popularMovie
+    case baseBallTeam
+    case contentsCategory
+    case pdFavoriteWork
+}
+
 final class MainViewController: UIViewController {
     
     // MARK: - Property
@@ -60,7 +69,6 @@ final class MainViewController: UIViewController {
     
     private let businessInfoLabel = UILabel()
     private let recruitLabel = UILabel()
-        
     
     
     // MARK: - LifeCycle
@@ -431,12 +439,12 @@ final class MainViewController: UIViewController {
     // MARK: - Function
     
     private func setCollectionTag() {
-        top20CollectionView.tag = 0
-        popularLiveCollectionView.tag = 1
-        popularMovieCollectionView.tag = 2
-        baseBallTeamCollectionView.tag = 3
-        contentsCategoryCollectionView.tag = 4
-        pdFavoriteWorkCollectionView.tag = 5
+        top20CollectionView.tag = CollectionViewTag.top20.rawValue
+        popularLiveCollectionView.tag = CollectionViewTag.popularLive.rawValue
+        popularMovieCollectionView.tag = CollectionViewTag.popularMovie.rawValue
+        baseBallTeamCollectionView.tag = CollectionViewTag.baseBallTeam.rawValue
+        contentsCategoryCollectionView.tag = CollectionViewTag.contentsCategory.rawValue
+        pdFavoriteWorkCollectionView.tag = CollectionViewTag.pdFavoriteWork.rawValue
     }
     
     private func register() {
@@ -536,69 +544,70 @@ extension MainViewController: UICollectionViewDelegate {
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView.tag {
-        case 0:
+        
+        guard let tag = CollectionViewTag(rawValue: collectionView.tag) else { return 0 }
+        
+        switch tag {
+        case .top20:
             return top20Data.count
             
-        case 1:
+        case .popularLive:
             return popularLiveData.count
             
-        case 2:
+        case .popularMovie:
             return popularMovieData.count
             
-        case 3:
+        case .baseBallTeam:
             return baseBallTeamData.count
             
-        case 4:
+        case .contentsCategory:
             return contentsCategoryData.count
             
-        case 5:
+        case .pdFavoriteWork:
             return pdFavoriteWorkData.count
-            
-        default:
-            return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch collectionView.tag {
-        case 0:
+        guard let tag = CollectionViewTag(rawValue: collectionView.tag) else { return UICollectionViewCell() }
+        
+        switch tag {
+        case .top20:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Top20CollectionViewCell.identifier, for: indexPath) as? Top20CollectionViewCell else { return UICollectionViewCell() }
             cell.top20DataBind(top20Data[indexPath.item])
             return cell
             
-        case 1:
+        case .popularLive:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PopularLiveCollectionViewCell.identifier, for: indexPath) as? PopularLiveCollectionViewCell else { return UICollectionViewCell() }
             cell.popularLiveDataBind(popularLiveData[indexPath.item])
             return cell
             
-        case 2:
+        case .popularMovie:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PopularMovieCollectionViewCell.identifier, for: indexPath) as? PopularMovieCollectionViewCell else { return UICollectionViewCell() }
             cell.popularMovieDataBind(popularMovieData[indexPath.item])
             return cell
             
-        case 3:
+        case .baseBallTeam:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BaseBallTeamCollectionViewCell.identifier, for: indexPath) as? BaseBallTeamCollectionViewCell else { return UICollectionViewCell() }
             
             let team = baseBallTeamData[indexPath.item]
             cell.baseBallTeamDataBind(team, at: indexPath.item)
             return cell
             
-        case 4:
+        case .contentsCategory:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentsCategoryCollectionViewCell.identifier, for: indexPath) as? ContentsCategoryCollectionViewCell else { return UICollectionViewCell() }
             cell.contentsCategoryDataBind(contentsCategoryData[indexPath.item])
             return cell
             
-        case 5:
+        case .pdFavoriteWork:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PDFavoriteWorkCollectionViewCell.identifier, for: indexPath) as? PDFavoriteWorkCollectionViewCell else { return UICollectionViewCell() }
             cell.pdFavoriteWorkDataBind(pdFavoriteWorkData[indexPath.item])
             return cell
-            
-        default:
-            return UICollectionViewCell()
         }
     }
 }
+
+// TODO: - enum으로 tag 변경
 
 extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
@@ -627,7 +636,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             return .zero
         }
     }
-    
+    // TODO: - enum으로 tag 변경
     private func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> Int {
@@ -636,7 +645,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             return 0
         }
     }
-    
+    // TODO: - enum으로 tag 변경
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -663,7 +672,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
             return 0
         }
     }
-    
+    // TODO: - enum으로 tag 변경
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
