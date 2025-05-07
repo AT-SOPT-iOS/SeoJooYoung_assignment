@@ -550,7 +550,7 @@ final class MainViewController: UIViewController {
         ], for: .normal)
         tabbarView.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.pretendard(size: 17, weight: .regular)
+            NSAttributedString.Key.font: UIFont.pretendard(size: 17, weight: .semiBold)
         ], for: .selected)
         updateVisibleView(for: 0)
         tabbarView.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
