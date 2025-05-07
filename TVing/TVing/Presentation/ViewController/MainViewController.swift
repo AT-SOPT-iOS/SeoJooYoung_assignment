@@ -36,6 +36,14 @@ final class MainViewController: UIViewController {
     private let tabbarUnderLineView = UIView()
     private let tabbarDividerView = UIView()
     
+    private let contentViews: [UIView] = [
+        createContentView(text: "드라마 화면입니다", backgroundColor: .systemOrange),
+        createContentView(text: "예능 화면입니다", backgroundColor: .systemYellow),
+        createContentView(text: "영화 화면입니다", backgroundColor: .systemGreen),
+        createContentView(text: "스포츠 화면입니다", backgroundColor: .systemBlue),
+        createContentView(text: "뉴스 화면입니다", backgroundColor: .systemPurple)
+    ]
+    
     private let mainScrollView = UIScrollView()
     private let mainScrollContentView = UIView()
     
@@ -81,6 +89,7 @@ final class MainViewController: UIViewController {
         register()
         setDelegate()
         setCollectionViewLayout()
+        setTabbarView()
     }
     
     // MARK: - UI Setting
@@ -107,15 +116,6 @@ final class MainViewController: UIViewController {
             ["홈", "드라마", "예능", "영화", "스포츠", "뉴스"].enumerated().forEach { index, title in
                 tabbarView.insertSegment(withTitle: title, at: index, animated: true)
             }
-            $0.selectedSegmentIndex = 0
-            $0.setTitleTextAttributes([
-                NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.font: UIFont.pretendard(size: 17, weight: .regular)
-            ], for: .normal)
-            $0.setTitleTextAttributes([
-                NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.font: UIFont.pretendard(size: 17, weight: .regular)
-            ], for: .selected)
         }
         
         tabbarUnderLineView.do {
@@ -278,15 +278,23 @@ final class MainViewController: UIViewController {
         
         tabbarUnderLineView.snp.makeConstraints {
             $0.top.equalTo(tabbarView.snp.bottom).offset(7)
-            $0.width.equalTo(15)
+            $0.width.equalTo(30)
             $0.height.equalTo(3)
-            $0.leading.equalTo(tabbarView.snp.leading).offset(26)
+            $0.leading.equalTo(tabbarView.snp.leading)
         }
         
         tabbarDividerView.snp.makeConstraints {
             $0.width.equalToSuperview()
             $0.height.equalTo(1)
             $0.top.equalTo(tabbarUnderLineView.snp.bottom)
+        }
+        
+        contentViews.forEach { contentView in
+            view.addSubview(contentView)
+            contentView.snp.makeConstraints {
+                $0.top.equalTo(tabbarView.snp.bottom).offset(20)
+                $0.leading.trailing.bottom.equalToSuperview().inset(20)
+            }
         }
         
         view.addSubview(mainScrollView)
@@ -532,6 +540,60 @@ final class MainViewController: UIViewController {
         let pdFavoriteWorkCollectionViewFlowLayout = UICollectionViewFlowLayout()
         pdFavoriteWorkCollectionViewFlowLayout.scrollDirection = .horizontal
         pdFavoriteWorkCollectionView.setCollectionViewLayout(pdFavoriteWorkCollectionViewFlowLayout, animated: true)
+    }
+    
+    private func setTabbarView() {
+        tabbarView.selectedSegmentIndex = 0
+        tabbarView.setTitleTextAttributes([
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.pretendard(size: 17, weight: .regular)
+        ], for: .normal)
+        tabbarView.setTitleTextAttributes([
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.pretendard(size: 17, weight: .regular)
+        ], for: .selected)
+        updateVisibleView(for: 0)
+        tabbarView.addTarget(self, action: #selector(didChangeValue(segment:)), for: .valueChanged)
+        tabbarView.addTarget(self, action: #selector(changeSegmentedControlUnderLine(_:)), for: .valueChanged)
+    }
+    
+    @objc
+    private func didChangeValue(segment: UISegmentedControl) {
+        updateVisibleView(for: segment.selectedSegmentIndex)
+    }
+    
+    @objc
+    private func changeSegmentedControlUnderLine(_ segment: UISegmentedControl) {
+        lazy var leadingDistance: CGFloat =  CGFloat(tabbarView.selectedSegmentIndex) * 73
+        UIView.animate(withDuration: 0.2, animations: {
+            self.tabbarUnderLineView.snp.updateConstraints { $0.leading.equalTo(self.tabbarView.snp.leading).offset(leadingDistance)
+            }
+        })
+    }
+    
+    private func updateVisibleView(for selectedIndex: Int) {
+        for (index, view) in contentViews.enumerated() {
+            view.isHidden = index + 1 != selectedIndex
+        }
+        
+        mainScrollView.isHidden = selectedIndex != 0
+    }
+    
+    private static func createContentView(text: String, backgroundColor: UIColor) -> UIView {
+        return UIView().then {
+            $0.backgroundColor = backgroundColor
+            $0.isHidden = true
+            let label = UILabel().then {
+                $0.text = text
+                $0.font = .boldSystemFont(ofSize: 18)
+                $0.textColor = .white
+                $0.textAlignment = .center
+            }
+            $0.addSubview(label)
+            label.snp.makeConstraints {
+                $0.center.equalToSuperview()
+            }
+        }
     }
 }
 
