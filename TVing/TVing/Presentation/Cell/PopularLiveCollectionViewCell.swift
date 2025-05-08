@@ -83,7 +83,6 @@ class PopularLiveCollectionViewCell: UICollectionViewCell {
         
         liveImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.width.equalTo(200)
             $0.height.equalTo(80)
         }
         

@@ -32,6 +32,10 @@ final class MainViewController: UIViewController {
     private let logoImageView = UIImageView()
     private let searchButton = UIButton()
     private let profileButton = UIButton()
+    private let headerButtonStackView = UIStackView()
+    private let headerStackView = UIStackView()
+    
+    
     private let tabbarView = UISegmentedControl()
     private let tabbarUnderLineView = UIView()
     private let tabbarDividerView = UIView()
@@ -79,11 +83,19 @@ final class MainViewController: UIViewController {
     private let recruitLabel = UILabel()
     
     
+    private let dividerDot1 = UILabel()
+    private let dividerDot2 = UILabel()
+    private let dividerDot3 = UILabel()
+    private let footerFirstStackView = UIStackView()
+    private let footerSecondStackView = UIStackView()
+    private let footerTotalStackView = UIStackView()
+    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setStyle()
+        setHierarchy()
         setLayout()
         setCollectionTag()
         register()
@@ -95,6 +107,8 @@ final class MainViewController: UIViewController {
     // MARK: - UI Setting
     
     private func setStyle() {
+        view.backgroundColor = .black
+        
         logoImageView.do {
             $0.image = .mainLogo
         }
@@ -105,6 +119,25 @@ final class MainViewController: UIViewController {
         
         profileButton.do {
             $0.setImage(.profile, for: .normal)
+        }
+        
+        headerButtonStackView.do {
+            [searchButton, profileButton].forEach {
+                headerButtonStackView.addArrangedSubview($0)
+            }
+            $0.axis = .horizontal
+            $0.distribution = .fillProportionally
+            $0.spacing = 10
+        }
+        
+        headerStackView.do {
+            [logoImageView, headerButtonStackView].forEach {
+                headerStackView.addArrangedSubview($0)
+            }
+            $0.axis = .horizontal
+            $0.distribution = .fillProportionally
+            $0.spacing = 130
+            $0.alignment = .center
         }
         
         tabbarView.do {
@@ -234,24 +267,76 @@ final class MainViewController: UIViewController {
             $0.textColor = .gray2
             $0.font = .pretendard(size: 11, weight: .medium)
         }
+        
+        dividerDot1.do {
+            $0.text = "·"
+            $0.textColor = .gray2
+        }
+        
+        dividerDot2.do {
+            $0.text = "·"
+            $0.textColor = .gray2
+        }
+        
+        dividerDot3.do {
+            $0.text = "·"
+            $0.textColor = .gray2
+        }
+        
+        footerFirstStackView.do {
+            [customerSupportLabel, dividerDot1, termsOfServiceLabel, dividerDot2, privacyPolicyLabel].forEach {
+                footerFirstStackView.addArrangedSubview($0)
+            }
+            $0.axis = .horizontal
+            $0.spacing = 3
+        }
+        
+        footerSecondStackView.do {
+            [businessInfoLabel, dividerDot3, recruitLabel].forEach {
+                footerSecondStackView.addArrangedSubview($0)
+            }
+            $0.axis = .horizontal
+            $0.spacing = 3
+        }
+        
+        footerTotalStackView.do {
+            [footerFirstStackView, footerSecondStackView].forEach {
+                footerTotalStackView.addArrangedSubview($0)
+            }
+            $0.axis = .vertical
+            $0.spacing = 0
+            $0.distribution = .fillEqually
+            $0.alignment = .leading
+        }
+    }
+    
+    private func setHierarchy() {
+        view.addSubview(headerStackView)
+        view.addSubview(tabbarView)
+        view.addSubview(tabbarUnderLineView)
+        view.addSubview(tabbarDividerView)
+        
+        contentViews.forEach { contentView in
+            view.addSubview(contentView)
+            contentView.snp.makeConstraints {
+                $0.top.equalTo(tabbarView.snp.bottom).offset(20)
+                $0.leading.trailing.bottom.equalToSuperview().inset(20)
+            }
+        }
+        
+        view.addSubview(mainScrollView)
+        mainScrollView.addSubview(mainScrollContentView)
+        
+        [mainMovieImageView, top20Label, top20CollectionView, popularLiveLabel, popularLiveCollectionView, popularMovieLabel, popularMovieCollectionView, baseBallTeamCollectionView, contentsCategoryCollectionView, pdFavoriteWorkLabel, pdFavoriteWorkCollectionView, noticeView, footerTotalStackView].forEach {
+            mainScrollContentView.addSubview($0)
+        }
+        
+        [noticeLabel, noticeTitleLabel, noticeMoreImageView].forEach {
+            noticeView.addSubview($0)
+        }
     }
     
     private func setLayout() {
-        view.backgroundColor = .black
-        
-        let headerButtonStackView = UIStackView(arrangedSubviews: [searchButton, profileButton])
-        headerButtonStackView.axis = .horizontal
-        headerButtonStackView.distribution = .fillProportionally
-        headerButtonStackView.spacing = 10
-        
-        let headerStackView = UIStackView(arrangedSubviews: [logoImageView, headerButtonStackView])
-        headerStackView.axis = .horizontal
-        headerStackView.distribution = .fillProportionally
-        headerStackView.spacing = 130
-        headerStackView.alignment = .center
-        
-        view.addSubview(headerStackView)
-        
         headerStackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.equalToSuperview()
@@ -267,9 +352,6 @@ final class MainViewController: UIViewController {
             $0.width.height.equalTo(30)
         }
         
-        view.addSubview(tabbarView)
-        view.addSubview(tabbarUnderLineView)
-        view.addSubview(tabbarDividerView)
         tabbarView.snp.makeConstraints {
             $0.width.equalToSuperview()
             $0.top.equalTo(headerStackView.snp.bottom)
@@ -287,21 +369,6 @@ final class MainViewController: UIViewController {
             $0.width.equalToSuperview()
             $0.height.equalTo(1)
             $0.top.equalTo(tabbarUnderLineView.snp.bottom)
-        }
-        
-        contentViews.forEach { contentView in
-            view.addSubview(contentView)
-            contentView.snp.makeConstraints {
-                $0.top.equalTo(tabbarView.snp.bottom).offset(20)
-                $0.leading.trailing.bottom.equalToSuperview().inset(20)
-            }
-        }
-        
-        view.addSubview(mainScrollView)
-        mainScrollView.addSubview(mainScrollContentView)
-        
-        [mainMovieImageView, top20Label, top20CollectionView, popularLiveLabel, popularLiveCollectionView, popularMovieLabel, popularMovieCollectionView, baseBallTeamCollectionView, contentsCategoryCollectionView, pdFavoriteWorkLabel, pdFavoriteWorkCollectionView, noticeView].forEach {
-            mainScrollContentView.addSubview($0)
         }
         
         mainScrollView.snp.makeConstraints {
@@ -382,10 +449,6 @@ final class MainViewController: UIViewController {
             $0.height.equalTo(90)
         }
         
-        [noticeLabel, noticeTitleLabel, noticeMoreImageView].forEach {
-            noticeView.addSubview($0)
-        }
-        
         noticeView.snp.makeConstraints {
             $0.top.equalTo(pdFavoriteWorkCollectionView.snp.bottom).offset(23)
             $0.leading.trailing.equalToSuperview().inset(14)
@@ -407,41 +470,12 @@ final class MainViewController: UIViewController {
             $0.width.height.equalTo(18)
         }
         
-        
-        let dividerDot1 = makeDividerDot()
-        let dividerDot2 = makeDividerDot()
-        
-        let footerFirstStackView = UIStackView(arrangedSubviews: [customerSupportLabel, dividerDot1, termsOfServiceLabel, dividerDot2, privacyPolicyLabel])
-        footerFirstStackView.axis = .horizontal
-        footerFirstStackView.spacing = 3
-        
-        let dividerDot3 = makeDividerDot()
-        
-        let footerSecondStackView = UIStackView(arrangedSubviews: [businessInfoLabel, dividerDot3, recruitLabel])
-        footerSecondStackView.axis = .horizontal
-        footerSecondStackView.spacing = 3
-        
-        let footerTotalStackView = UIStackView(arrangedSubviews: [footerFirstStackView, footerSecondStackView])
-        footerTotalStackView.axis = .vertical
-        footerTotalStackView.spacing = 0
-        footerTotalStackView.distribution = .fillEqually
-        footerTotalStackView.alignment = .leading
-    
-        mainScrollContentView.addSubview(footerTotalStackView)
-        
         footerTotalStackView.snp.makeConstraints {
             $0.top.equalTo(noticeView.snp.bottom).offset(12)
             $0.leading.equalTo(mainScrollContentView.snp.leading).offset(20)
             $0.trailing.equalTo(mainScrollContentView.snp.trailing)
             $0.bottom.equalToSuperview().inset(100)
         }
-    }
-    
-    private func makeDividerDot() -> UILabel {
-        let dot = UILabel()
-        dot.text = "·"
-        dot.textColor = .gray2
-        return dot
     }
     
     // MARK: - Function
