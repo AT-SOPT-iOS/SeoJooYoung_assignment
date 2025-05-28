@@ -12,11 +12,16 @@ final class DailyBoxOfficeService {
     static let shared = DailyBoxOfficeService()
     private init() {}
     
-    private let apiKey = "8e075a7b9de00c9639f8c734e2c7b07c"
-    
     // URLRequest 생성
     private func makeRequest(for date: String) -> URLRequest? {
-        let urlString = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=\(apiKey)&targetDt=\(date)"
+        var key = EnvironmentEnum.API_KEY
+        print(key)
+        var urlString = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key="
+        
+        urlString += "\(key)&targetDt=\(date)"
+        
+        print(urlString)
+        
         guard let url = URL(string: urlString) else { return nil }
         
         var request = URLRequest(url: url)
