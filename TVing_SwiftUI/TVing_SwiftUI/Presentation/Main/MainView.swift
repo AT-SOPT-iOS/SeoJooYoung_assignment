@@ -38,6 +38,7 @@ struct MainView: View {
     }
 }
 
+// MARK: - HeaderView
 fileprivate struct HeaderView: View {
     var body: some View {
         HStack {
@@ -59,6 +60,7 @@ fileprivate struct HeaderView: View {
     }
 }
 
+// MARK: - SegmentedControlView
 fileprivate struct SegmentedControlView: View {
     @State private var mainSelection = 0
     @Namespace private var indicatorNamespace
@@ -98,6 +100,7 @@ fileprivate struct SegmentedControlView: View {
     }
 }
 
+// MARK: - Top20View
 fileprivate struct Top20View: View {
     var body: some View {
         VStack(alignment: .leading) {
@@ -134,6 +137,7 @@ fileprivate struct Top20Cell: View {
     }
 }
 
+// MARK: - PopularLiveView
 fileprivate struct PopularLiveView: View {
     var body: some View {
         VStack(alignment: .leading) {
@@ -190,6 +194,7 @@ fileprivate struct PopularLiveCell: View {
     }
 }
 
+// MARK: - PopularMovieView
 fileprivate struct PopularMovieView: View {
     var body: some View {
         VStack {
@@ -219,6 +224,7 @@ fileprivate struct PopularMovieView: View {
     }
 }
 
+// MARK: - BaseballTeamView
 fileprivate struct BaseballTeamView: View {
     var body: some View {
         ScrollView(.horizontal) {
@@ -235,6 +241,7 @@ fileprivate struct BaseballTeamView: View {
     }
 }
 
+// MARK: - ContentCategoryView
 fileprivate struct ContentCategoryView: View {
     var body: some View {
         ScrollView(.horizontal) {
@@ -255,6 +262,7 @@ fileprivate struct ContentCategoryView: View {
     }
 }
 
+// MARK: - PDFavoriteView
 fileprivate struct PDFavoriteView: View {
     var body: some View {
         VStack(alignment: .leading) {
@@ -276,6 +284,7 @@ fileprivate struct PDFavoriteView: View {
     }
 }
 
+// MARK: - FooterView
 fileprivate struct NoticeView: View {
     var body: some View {
         ZStack {
