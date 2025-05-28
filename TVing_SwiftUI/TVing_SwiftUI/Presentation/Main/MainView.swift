@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct MainView: View {
+    private var top20Model = Top20Model.dummy()
+    private var popularLiveModel = PopularLiveModel.dummy()
+    private var popularMovieModel = PopularMovieModel.dummy()
+    private var baseballTeamModel = BaseballTeamModel.dummy()
+    private var contentCategoryModel = ContentCategoryModel.dummy()
+    private var pdFavoriteModel = PDFavoriteModel.dummy()
     
     var body: some View {
         ZStack {
@@ -23,12 +29,12 @@ struct MainView: View {
                         .aspectRatio(contentMode: .fill)
                         .padding(.bottom, 9)
                     
-                    Top20View()
-                    PopularLiveView()
-                    PopularMovieView()
-                    BaseballTeamView()
-                    ContentCategoryView()
-                    PDFavoriteView()
+                    Top20View(top20List: top20Model)
+                    PopularLiveView(popularLiveList: popularLiveModel)
+                    PopularMovieView(popularMovieList: popularMovieModel)
+                    BaseballTeamView(baseballTeamList: baseballTeamModel)
+                    ContentCategoryView(contentCategoryList: contentCategoryModel)
+                    PDFavoriteView(pdFavoriteList: pdFavoriteModel)
                     NoticeView()
                     FooterView()
                 }
@@ -102,6 +108,8 @@ fileprivate struct SegmentedControlView: View {
 
 // MARK: - Top20View
 fileprivate struct Top20View: View {
+    let top20List: [Top20Model]
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("오늘의 티빙 TOP 20")
@@ -109,8 +117,8 @@ fileprivate struct Top20View: View {
                 .foregroundStyle(.tvingWhite)
             ScrollView(.horizontal) {
                 HStack(spacing: 12) {
-                    ForEach(1..<4) { index in
-                        Top20Cell(index: index)
+                    ForEach(top20List) { item in
+                        Top20Cell(index: item.rank, image: item.image)
                     }
                 }
             }
@@ -122,6 +130,7 @@ fileprivate struct Top20View: View {
 
 fileprivate struct Top20Cell: View {
     var index: Int
+    var image: Image
     
     var body: some View {
         HStack(alignment: .bottom) {
@@ -129,7 +138,7 @@ fileprivate struct Top20Cell: View {
                 .italic()
                 .font(.system(size: 50, weight: .semibold))
                 .foregroundStyle(.tvingWhite)
-            Image(.signal)
+            image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 98, height: 146)
@@ -139,6 +148,8 @@ fileprivate struct Top20Cell: View {
 
 // MARK: - PopularLiveView
 fileprivate struct PopularLiveView: View {
+    let popularLiveList: [PopularLiveModel]
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -155,7 +166,15 @@ fileprivate struct PopularLiveView: View {
             
             ScrollView(.horizontal) {
                 HStack(spacing: 7) {
-                    PopularLiveCell()
+                    ForEach(popularLiveList) { item in
+                        PopularLiveCell(
+                            image: item.image,
+                            rank: item.rank,
+                            channel: item.channel,
+                            programName: item.programName,
+                            rate: item.rate
+                        )
+                    }
                 }
             }
         }
@@ -164,26 +183,32 @@ fileprivate struct PopularLiveView: View {
 }
 
 fileprivate struct PopularLiveCell: View {
+    var image: Image
+    var rank: Int
+    var channel: String
+    var programName: String
+    var rate: Float
+    
     var body: some View {
         VStack(alignment: .leading) {
-            Image(.exchange)
+            image
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 160, height: 80)
+                .aspectRatio(contentMode: .fit)
                 .clipShape(RoundedRectangle(cornerRadius: 3))
+                .frame(width: 160, height: 80)
             HStack {
-                Text("1")
+                Text("\(rank)")
                     .italic()
                     .font(.system(size: 19, weight: .bold))
                     .foregroundStyle(.tvingWhite)
                 VStack(alignment: .leading) {
-                    Text("JTBC")
+                    Text(channel)
                         .font(.pretendard(size: 10, weight: .medium))
                         .foregroundStyle(.tvingWhite)
-                    Text("이혼숙려캠프 34화")
+                    Text(programName)
                         .font(.pretendard(size: 10, weight: .regular))
                         .foregroundStyle(.tvingGray2)
-                    Text("27.2%")
+                    Text("\(rate.convertToOneDecimalString)%")
                         .font(.pretendard(size: 10, weight: .regular))
                         .foregroundStyle(.tvingGray2)
                 }
@@ -196,6 +221,8 @@ fileprivate struct PopularLiveCell: View {
 
 // MARK: - PopularMovieView
 fileprivate struct PopularMovieView: View {
+    let popularMovieList: [PopularMovieModel]
+    
     var body: some View {
         VStack {
             HStack {
@@ -212,10 +239,12 @@ fileprivate struct PopularMovieView: View {
             
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
-                    Image(.signal)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 98, height: 146)
+                    ForEach(popularMovieList) { item in
+                        item.image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 98, height: 146)
+                    }
                 }
             }
         }
@@ -226,14 +255,21 @@ fileprivate struct PopularMovieView: View {
 
 // MARK: - BaseballTeamView
 fileprivate struct BaseballTeamView: View {
+    let baseballTeamList: [BaseballTeamModel]
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 2)
-                        .foregroundStyle(.tvingWhite)
-                        .frame(width: 80, height: 50)
-                    Image(.samsungLions)
+                ForEach(
+                    Array(baseballTeamList.enumerated()),
+                    id: \.element.id
+                ) { index, item in
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 2)
+                            .foregroundStyle(index % 2 == 0 ? .tvingWhite : .tvingBlack)
+                            .frame(width: 80, height: 50)
+                        item.teamImage
+                    }
                 }
             }
         }
@@ -243,17 +279,21 @@ fileprivate struct BaseballTeamView: View {
 
 // MARK: - ContentCategoryView
 fileprivate struct ContentCategoryView: View {
+    let contentCategoryList: [ContentCategoryModel]
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 7) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 3)
-                        .foregroundStyle(.tvingGray4)
-                        .frame(width: 90, height: 45)
-                    Image(.appleTV)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 68)
+                ForEach(contentCategoryList) { item in
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 3)
+                            .foregroundStyle(.tvingGray4)
+                            .frame(width: 90, height: 45)
+                        item.image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 68)
+                    }
                 }
             }
         }
@@ -264,6 +304,8 @@ fileprivate struct ContentCategoryView: View {
 
 // MARK: - PDFavoriteView
 fileprivate struct PDFavoriteView: View {
+    let pdFavoriteList: [PDFavoriteModel]
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("김가현PD의 인생작 TOP 5")
@@ -271,11 +313,13 @@ fileprivate struct PDFavoriteView: View {
                 .foregroundStyle(.tvingWhite)
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
-                    Image(.earthArcade)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 160, height: 90)
-                        .clipShape(RoundedRectangle(cornerRadius: 3))
+                    ForEach(pdFavoriteList) { item in
+                        item.image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 160, height: 90)
+                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                    }
                 }
             }
         }
