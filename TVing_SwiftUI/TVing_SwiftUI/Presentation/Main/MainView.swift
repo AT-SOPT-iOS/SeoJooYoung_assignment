@@ -74,7 +74,7 @@ fileprivate struct SegmentedControlView: View {
     let mainSegments = ["홈", "드라마", "예능", "영화", "스포츠", "뉴스"]
     
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(0..<mainSegments.count, id: \.self) { index in
                     Button {
@@ -115,7 +115,7 @@ fileprivate struct Top20View: View {
             Text("오늘의 티빙 TOP 20")
                 .font(.pretendard(size: 15, weight: .bold))
                 .foregroundStyle(.tvingWhite)
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(top20List) { item in
                         Top20Cell(index: item.rank, image: item.image)
@@ -164,7 +164,7 @@ fileprivate struct PopularLiveView: View {
             }
             .padding(.trailing, 10)
             
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 7) {
                     ForEach(popularLiveList) { item in
                         PopularLiveCell(
@@ -237,7 +237,7 @@ fileprivate struct PopularMovieView: View {
             }
             .padding(.trailing, 10)
             
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(popularMovieList) { item in
                         item.image
@@ -258,7 +258,7 @@ fileprivate struct BaseballTeamView: View {
     let baseballTeamList: [BaseballTeamModel]
     
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(
                     Array(baseballTeamList.enumerated()),
@@ -282,7 +282,7 @@ fileprivate struct ContentCategoryView: View {
     let contentCategoryList: [ContentCategoryModel]
     
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 7) {
                 ForEach(contentCategoryList) { item in
                     ZStack {
@@ -305,26 +305,92 @@ fileprivate struct ContentCategoryView: View {
 // MARK: - PDFavoriteView
 fileprivate struct PDFavoriteView: View {
     let pdFavoriteList: [PDFavoriteModel]
+    @State private var currentPage: Int = 0
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("김가현PD의 인생작 TOP 5")
-                .font(.pretendard(size: 15, weight: .bold))
-                .foregroundStyle(.tvingWhite)
-            ScrollView(.horizontal) {
+            HStack {
+                Text("김가현PD의 인생작 TOP 5")
+                    .font(.pretendard(size: 15, weight: .bold))
+                    .foregroundStyle(.tvingWhite)
+                Spacer()
+                
+                HStack(spacing: 4) {
+                    ForEach(0..<pdFavoriteList.count, id: \.self) { index in
+                        Circle()
+                            .fill(index == currentPage ? Color.tvingWhite : Color.gray.opacity(0.5))
+                            .frame(width: 6, height: 6)
+                    }
+                }
+                .padding(.trailing, 10)
+            }
+            
+            PDListView(pdFavoriteList: pdFavoriteList, currentPage: $currentPage)
+            
+        }
+        .padding(.leading, 12)
+        .padding(.bottom, 23)
+    }
+}
+
+fileprivate struct PDListView: View {
+    let pdFavoriteList: [PDFavoriteModel]
+    @Binding var currentPage: Int
+    
+    var body: some View {
+        GeometryReader { outerGeo in
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ForEach(pdFavoriteList) { item in
-                        item.image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 160, height: 90)
-                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                    // 원래는 pdFavoriteList.enumerated()로 썼었는데, 계속 type check 에러가 떠서 .. 변경함
+                    // Array(zip(pdFavorite.indices, pdFavoriteList))
+                    // => [ (index, item) ] 형식의 배열을 만듦
+                    // \.1.id
+                    // => 튜플의 두 번째 요소인 item의 id를 id로 쓰겠단 말씀 !
+                    // 튜플로 안 만들었다면, ForEach(pdFavoriteList, id: \.id) 와 같이도 가능함
+                    ForEach(
+                        Array(zip(pdFavoriteList.indices, pdFavoriteList)),
+                        id: \.1.id
+                    ) { index, item in
+                        GeometryReader { geo in
+                            ZStack {
+                                item.image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 160, height: 90)
+                                    .clipShape(RoundedRectangle(cornerRadius: 3))
+                            }
+                            .onAppear {
+                                checkPageChanged(geo: geo, outerGeo: outerGeo, index: index)
+                            }
+                            .onChange(of: geo.frame(in: .global).midX) {
+                                checkPageChanged(geo: geo, outerGeo: outerGeo, index: index)
+                            }
+                        }
+                        .frame(width: 160, height: 90)
                     }
                 }
             }
         }
-        .padding(.leading, 12)
-        .padding(.bottom, 23)
+        .frame(height: 90)
+    }
+    
+    private func checkPageChanged(geo: GeometryProxy, outerGeo: GeometryProxy, index: Int) {
+        let cardFrame = geo.frame(in: .global)
+        let outerFrame = outerGeo.frame(in: .global)
+
+        let itemLeft = cardFrame.minX
+        let itemRight = cardFrame.maxX
+        let targetX = outerFrame.minX + 12 + 160 / 2
+
+        let isPageChanged = itemLeft < targetX && itemRight > targetX
+
+        if isPageChanged {
+            if currentPage != index {
+                DispatchQueue.main.async {
+                    currentPage = index
+                }
+            }
+        }
     }
 }
 

@@ -18,7 +18,9 @@ extension PDFavoriteModel {
         return [
             PDFavoriteModel(title: "뿅뿅 지구오락실 2", image: Image(.earthArcade)),
             PDFavoriteModel(title: "언젠가는 슬기로울 전공의생활", image: Image(.unseulsaeng)),
-            PDFavoriteModel(title: "이혼보험", image: Image(.divorceInsurance))
+            PDFavoriteModel(title: "이혼보험", image: Image(.divorceInsurance)),
+            PDFavoriteModel(title: "선재 업고 튀어", image: Image(.seonjae)),
+            PDFavoriteModel(title: "환승연애3", image: Image(.exchange))
         ]
     }
 }
